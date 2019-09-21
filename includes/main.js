@@ -1,4 +1,4 @@
-/* your javascript goes here */
+//! your javascript goes here
 
 $(document).ready(initiateApp);
 
@@ -20,18 +20,19 @@ var pictures = [
 ];
 var picturesOG = pictures;
 function initiateApp(){
-	/*advanced: add jquery sortable call here to make the gallery able to be sorted
-		//on change, rebuild the images array into the new order
-	*/
+	//!advanced: add jquery sortable call here to make the gallery able to be sorted
+		//!on change, rebuild the images array into the new order
 
 	addModalCloseHandler();
-	var sortableObj = { //makes the .sortable obj that holds the events
-		start: makeGallery(pictures),
-		update: findSortOrder
-	}
 
+	var sortableObj = { //todo makes the .sortable obj that holds the events
+		start: makeGallery(pictures),
+		change: findSortOrder,
+		update: function (){console.log(pictures)}
+	}
 	$('#gallery').sortable(sortableObj); /* makes the pictures sortable and updates the array on change 
-	makeGallery at the start to create the gallery*/
+	makeGallery at the start to create the gallery. console logs the new pictures array after update */
+
 	var theGalleryFigure = $('#gallery>figure');
 	$(theGalleryFigure).click(displayImage);
 }
@@ -40,15 +41,13 @@ function findSortOrder(){
 	var theOrder = $('#gallery').sortable('toArray',{attribute: 'style'});
 	for (var currentImg = 0; currentImg<theOrder.length;currentImg++){
 		var valToChangeIndex = theOrder[currentImg].lastIndexOf('images/');
-		var changedVal = theOrder[currentImg].slice(valToChangeIndex);// finds images/ and removes it everything before it
+		var changedVal = theOrder[currentImg].slice(valToChangeIndex);//finds images/ and removes it everything before it
 		valToChangeIndex = changedVal.lastIndexOf('")');
 		changedVal = changedVal.slice(0,valToChangeIndex);//removes everything after the file extension from ") and on
 		theOrder[currentImg] = changedVal; //changes the current value to the new string shich is just the images/xxx.xxx
 	}
 	pictures = theOrder; //sets the pictures array to the newly ordered array
-
-	console.log("This is the new pictures array order");
-	console.log(pictures);
+	/* console.log("running change"); */
 }
 /* ----------makes the gallary---------- */
 function makeGallery(imageArray){
@@ -61,16 +60,16 @@ function makeGallery(imageArray){
 		$(newFig).append(newFigCap);
 		$(target).append(newFig);
 	}
-	//use loops and jquery dom creation to make the html structure inside the #gallery section
+	//!use loops and jquery dom creation to make the html structure inside the #gallery section
 
-	//create a loop to go through the images in the imageArray
-		//create the elements needed for each picture, store the elements in variable
+	//!create a loop to go through the images in the imageArray
+		//!create the elements needed for each picture, store the elements in variable
 
-		//attach a click handler to the figure you create.  call the "displayImage" function.  
+		//!attach a click handler to the figure you create.  call the "displayImage" function.  
 
-		//append the element to the #gallery section
+		//!append the element to the #gallery section
 	
-	// side note: make sure to remove the hard coded html in the index.html when you are done!
+	//! side note: make sure to remove the hard coded html in the index.html when you are done!
 
 }
 function addModalCloseHandler(){
@@ -78,8 +77,8 @@ function addModalCloseHandler(){
 		$('#galleryModal').modal('hide');
 	});
 	
-	//add a click handler to the img element in the image modal.  When the element is clicked, close the modal
-	//for more info, check here: https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp	
+	//!add a click handler to the img element in the image modal.  When the element is clicked, close the modal
+	//!for more info, check here: https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp	
 }
 function displayImage(){
 	var imgSrc = $(this).css('background-image');
@@ -97,18 +96,18 @@ function displayImage(){
 
 	$('#galleryModal').modal('show');
 
-	//find the url of the image by grabbing the background-image source, store it in a variable
-	//grab the direct url of the image by getting rid of the other pieces you don't need
+	//!find the url of the image by grabbing the background-image source, store it in a variable
+	//!grab the direct url of the image by getting rid of the other pieces you don't need
 
-	//grab the name from the file url, ie the part without the path.  so "images/pexels-photo-132037.jpeg" would become
-		// pexels-photo-132037
-		//take a look at the lastIndexOf method
+	//!grab the name from the file url, ie the part without the path.  so "images/pexels-photo-132037.jpeg" would become
+		//! pexels-photo-132037
+		//!take a look at the lastIndexOf method
 
-	//change the modal-title text to the name you found above
-	//change the src of the image in the modal to the url of the image that was clicked on
+	//!change the modal-title text to the name you found above
+	//!change the src of the image in the modal to the url of the image that was clicked on
 
-	//show the modal with JS.  Check for more info here: 
-	//https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
+	//!show the modal with JS.  Check for more info here: 
+	//!https://www.w3schools.com/bootstrap/bootstrap_ref_js_modal.asp
 }
 
 
