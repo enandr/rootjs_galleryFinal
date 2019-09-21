@@ -24,12 +24,12 @@ function initiateApp(){
 		//on change, rebuild the images array into the new order
 	*/
 
-	// makeGallery(pictures);
 	addModalCloseHandler();
-	var sortableObj = {
+	var sortableObj = { //makes the .sortable obj that holds the events
 		start: makeGallery(pictures),
 		update: findSortOrder
 	}
+
 	$('#gallery').sortable(sortableObj); /* makes the pictures sortable and updates the array on change 
 	makeGallery at the start to create the gallery*/
 	var theGalleryFigure = $('#gallery>figure');
@@ -40,12 +40,12 @@ function findSortOrder(){
 	var theOrder = $('#gallery').sortable('toArray',{attribute: 'style'});
 	for (var currentImg = 0; currentImg<theOrder.length;currentImg++){
 		var valToChangeIndex = theOrder[currentImg].lastIndexOf('images/');
-		var changedVal = theOrder[currentImg].slice(valToChangeIndex);
+		var changedVal = theOrder[currentImg].slice(valToChangeIndex);// finds images/ and removes it everything before it
 		valToChangeIndex = changedVal.lastIndexOf('")');
-		changedVal = changedVal.slice(0,valToChangeIndex);
-		theOrder[currentImg] = changedVal;
+		changedVal = changedVal.slice(0,valToChangeIndex);//removes everything after the file extension from ") and on
+		theOrder[currentImg] = changedVal; //changes the current value to the new string shich is just the images/xxx.xxx
 	}
-	pictures = theOrder;
+	pictures = theOrder; //sets the pictures array to the newly ordered array
 
 	console.log("This is the new pictures array order");
 	console.log(pictures);
