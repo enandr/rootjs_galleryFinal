@@ -20,17 +20,29 @@ var pictures = [
 ]; 
 
 
-var picturesOG = pictures;
+
+
 function initiateApp(){
+	if (typeof(Storage) !== 'undefined' || typeof(Storage !== 'null')){
+
+		// localStorage.setItem("arraySort",JSON.stringify(pictures));
+	
+		stored = JSON.parse(localStorage.getItem("arraySort"));
+
+		console.log(stored);
+		console.log(typeof(stored));
+	}
+	else {
+		// var stored = pictures;
+	}
 		 /* advanced: add jquery sortable call here to make the gallery able to be sorted
 		 on change, rebuild the images array into the new order  */
 
 	addModalCloseHandler();
 
 	var sortableObj = { //?makes the .sortable obj that holds the events
-		start: makeGallery(pictures),
-		change: findSortOrder,
-		update: function (){console.log(pictures)}
+		start: makeGallery(stored),
+		update: findSortOrder
 	}
 	$('#gallery').sortable(sortableObj); //?makes the pictures sortable and updates the array on change 
 	//? makeGallery at the start to create the gallery. console logs the new pictures array after update
@@ -43,24 +55,26 @@ function findSortOrder(){
 	var theOrder = $('#gallery').sortable('toArray',{attribute: 'style'});
 	for (var currentImg = 0; currentImg<theOrder.length;currentImg++){
 		var valToChangeIndex = theOrder[currentImg].lastIndexOf('images/');
-		var changedVal = theOrder[currentImg].slice(valToChangeIndex);//?finds images/ and removes it everything before it
+		var changedVal = theOrder[currentImg].slice(valToChangeIndex);//todo finds images/ and removes it everything before it
 		valToChangeIndex = changedVal.lastIndexOf('")');
-		changedVal = changedVal.slice(0,valToChangeIndex);//?removes everything after the file extension from ") and on
-		theOrder[currentImg] = changedVal; //?changes the current value to the new string shich is just the images/xxx.xxx
+		changedVal = changedVal.slice(0,valToChangeIndex);//todo removes everything after the file extension from ") and on
+		theOrder[currentImg] = changedVal; //todo changes the current value to the new string shich is just the images/xxx.xxx
 	}
-	pictures = theOrder; //?sets the pictures array to the newly ordered array
+	pictures = theOrder; //todo sets the pictures array to the newly ordered array
+	localStorage.setItem("arraySort",JSON.stringify(pictures));
 }
-//? ----------makes the gallary----------
+//todo ----------makes the gallary----------
 function makeGallery(imageArray){
-	var pSize = pictures.length;
+	var pSize = imageArray.length;
 	var target = $('#gallery');
 	for( var fig = 0; fig < pSize; fig++){
-		var bgImg = 'background-image: url('+pictures[fig]+')'
+		var bgImg = 'background-image: url('+imageArray[fig]+')';
 		var newFig = $('<figure>',{class: 'imageGallery col-xs-12 col-sm-6 col-md-4',style: bgImg, css:{'text-shadow':'1px 1px 2px black',color:'white'} });
-		var newFigCap = $('<figcaption>',{text: pictures[fig].slice(7)});
+		var newFigCap = $('<figcaption>',{text: imageArray[fig].slice(7)});
 		$(newFig).append(newFigCap);
 		$(target).append(newFig);
 	}
+	
 	//use loops and jquery dom creation to make the html structure inside the #gallery section
 
 	//Create a loop to go through the images in the imageArray
@@ -84,16 +98,15 @@ function addModalCloseHandler(){
 function displayImage(){
 	var imgSrc = $(this).css('background-image');
 	imgSrc = imgSrc.slice(imgSrc.lastIndexOf('images/'));
-	imgSrc = imgSrc.slice(0,-2); //?get the lastindexof value and slices everything before it. then slices 2 off the end to remove ")
+	imgSrc = imgSrc.slice(0,-2); //todo get the lastindexof value and slices everything before it. then slices 2 off the end to remove ")
 
 	var modTitleIndex = imgSrc.slice(imgSrc.lastIndexOf('.'));
-	var modTitle = imgSrc.slice(0,-modTitleIndex.length); //?finds where the . is on the imgSrc sring and removes that and after
-	//! modTitleIndex = imgSrc.slice(modTitle.lastIndexOf('images/'));
+	var modTitle = imgSrc.slice(0,-modTitleIndex.length); //todo finds where the . is on the imgSrc sring and removes that and after
 	modTitle = modTitle.slice(7);
 
 	$('.modal-title').text(modTitle);
 	var imgTarget = $('.modal-body>img');
-	imgTarget.attr('src',imgSrc);//?Sets the image src attribute to imgSrc
+	imgTarget.attr('src',imgSrc);//todo Sets the image src attribute to imgSrc
 
 	$('#galleryModal').modal('show');
 
